@@ -1,0 +1,53 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+}
+
+task clearLibraryAar(type: Delete) {
+    delete fileTree("${deployAarPath}") {
+        include 'my-plugin-**.aar'
+    }
+}
+
+task deployLibraryAar(type: Copy, dependsOn: clearLibraryAar) {
+    from('build/outputs/aar/')
+    into("${deployAarPath}")
+    include('UnityLogCat-release.aar')
+    rename('UnityLogCat-release.aar', 'UnityLogCat-' + android.defaultConfig.versionName + '.aar')
+    doLast {
+        fileTree("${deployAarPath}"){ include { it.file.name ==~ "^my-plugin-([0-9.]+).aar.meta\$" }}.each { f -> f.renameTo(file("${deployAarPath}/my-plugin-" + android.defaultConfig.versionName + ".aar.meta")) }
+    }
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'bundleReleaseAar') {
+        task.finalizedBy 'deployLibraryAar'
+    }
+}
