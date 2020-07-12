@@ -12,6 +12,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/UnityLogCat" />
+            <option value="$PROJECT_DIR$/UnityToast" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>

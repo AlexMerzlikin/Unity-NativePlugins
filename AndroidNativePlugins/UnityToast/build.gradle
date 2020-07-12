@@ -32,15 +32,15 @@ dependencies {
 
 task clearLibraryAar(type: Delete) {
     delete fileTree("${deployAarPath}") {
-        include 'UnityLogCat-**.aar'
+        include 'UnityToast-**.aar'
     }
 }
 
 task deployLibraryAar(type: Copy, dependsOn: clearLibraryAar) {
     from('build/outputs/aar/')
     into("${deployAarPath}")
-    include('UnityLogCat-release.aar')
-    rename('UnityLogCat-release.aar', 'UnityLogCat-' + android.defaultConfig.versionName + '.aar')
+    include('UnityToast-release.aar')
+    rename('UnityToast-release.aar', 'UnityToast-' + android.defaultConfig.versionName + '.aar')
     doLast {
         fileTree("${deployAarPath}"){ include { it.file.name ==~ "^my-plugin-([0-9.]+).aar.meta\$" }}.each { f -> f.renameTo(file("${deployAarPath}/my-plugin-" + android.defaultConfig.versionName + ".aar.meta")) }
     }

@@ -1,3 +1,4 @@
+include ':UnityToast'
 include ':UnityLogCat'
 include ':app'
 rootProject.name = "UnityNativePlugins"

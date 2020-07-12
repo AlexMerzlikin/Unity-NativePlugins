@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Logger;
+using UnityEngine;
 
-namespace Logger
+namespace Example
 {
     public class LogCatExample : MonoBehaviour
     {
